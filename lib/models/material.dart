@@ -1,31 +1,11 @@
-import 'package:hive/hive.dart';
-
-part 'material.g.dart';
-
-@HiveType(typeId: 2)
 class Material {
-  @HiveField(0)
   final String id;
-
-  @HiveField(1)
   final String name;
-
-  @HiveField(2)
   final String barcode;
-
-  @HiveField(3)
   final double unitCost;
-
-  @HiveField(4)
   final String unitType;
-
-  @HiveField(5)
   final double currentStock;
-
-  @HiveField(6)
   final double minimumStock;
-
-  @HiveField(7)
   final DateTime lastUpdated;
 
   Material({
@@ -58,6 +38,32 @@ class Material {
       currentStock: currentStock ?? this.currentStock,
       minimumStock: minimumStock ?? this.minimumStock,
       lastUpdated: lastUpdated ?? this.lastUpdated,
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'name': name,
+      'barcode': barcode,
+      'unitCost': unitCost,
+      'unitType': unitType,
+      'currentStock': currentStock,
+      'minimumStock': minimumStock,
+      'lastUpdated': lastUpdated.toIso8601String(),
+    };
+  }
+
+  factory Material.fromJson(Map<String, dynamic> json) {
+    return Material(
+      id: json['id'] as String,
+      name: json['name'] as String,
+      barcode: json['barcode'] as String,
+      unitCost: (json['unitCost'] as num).toDouble(),
+      unitType: json['unitType'] as String,
+      currentStock: (json['currentStock'] as num).toDouble(),
+      minimumStock: (json['minimumStock'] as num).toDouble(),
+      lastUpdated: DateTime.parse(json['lastUpdated'] as String),
     );
   }
 }

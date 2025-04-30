@@ -32,38 +32,39 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'YOUR_API_KEY',
-    appId: 'YOUR_APP_ID',
-    messagingSenderId: 'YOUR_MESSAGING_SENDER_ID',
+    apiKey: 'AIzaSyCzdrHsnQfn9OtExDKOFXpeQd9VcMIIYWo',
+    appId: '1:115124468211:web:aa65850d320321d9403a86',
+    messagingSenderId: '115124468211',
     projectId: 'madhk-55157',
     authDomain: 'madhk-55157.firebaseapp.com',
-    storageBucket: 'madhk-55157.appspot.com',
+    storageBucket: 'madhk-55157.firebasestorage.app',
+    measurementId: 'G-VDTR8S0NJW',
   );
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'YOUR_ANDROID_API_KEY',
-    appId: 'YOUR_ANDROID_APP_ID',
-    messagingSenderId: 'YOUR_MESSAGING_SENDER_ID',
+    apiKey: 'AIzaSyCzdrHsnQfn9OtExDKOFXpeQd9VcMIIYWo',
+    appId: '1:115124468211:web:aa65850d320321d9403a86',
+    messagingSenderId: '115124468211',
     projectId: 'madhk-55157',
-    storageBucket: 'madhk-55157.appspot.com',
+    storageBucket: 'madhk-55157.firebasestorage.app',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'YOUR_IOS_API_KEY',
-    appId: 'YOUR_IOS_APP_ID',
-    messagingSenderId: 'YOUR_MESSAGING_SENDER_ID',
+    apiKey: 'AIzaSyCzdrHsnQfn9OtExDKOFXpeQd9VcMIIYWo',
+    appId: '1:115124468211:web:aa65850d320321d9403a86',
+    messagingSenderId: '115124468211',
     projectId: 'madhk-55157',
-    storageBucket: 'madhk-55157.appspot.com',
+    storageBucket: 'madhk-55157.firebasestorage.app',
     iosClientId: 'YOUR_IOS_CLIENT_ID',
     iosBundleId: 'YOUR_IOS_BUNDLE_ID',
   );
 
   static const FirebaseOptions macos = FirebaseOptions(
-    apiKey: 'YOUR_MACOS_API_KEY',
-    appId: 'YOUR_MACOS_APP_ID',
-    messagingSenderId: 'YOUR_MESSAGING_SENDER_ID',
+    apiKey: 'AIzaSyCzdrHsnQfn9OtExDKOFXpeQd9VcMIIYWo',
+    appId: '1:115124468211:web:aa65850d320321d9403a86',
+    messagingSenderId: '115124468211',
     projectId: 'madhk-55157',
-    storageBucket: 'madhk-55157.appspot.com',
+    storageBucket: 'madhk-55157.firebasestorage.app',
     iosClientId: 'YOUR_MACOS_CLIENT_ID',
     iosBundleId: 'YOUR_MACOS_BUNDLE_ID',
   );

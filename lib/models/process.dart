@@ -1,32 +1,15 @@
-import 'package:hive/hive.dart';
-
-part 'process.g.dart';
-
-@HiveType(typeId: 3)
 class Process {
-  @HiveField(0)
   final String id;
-
-  @HiveField(1)
   final String name;
-
-  @HiveField(2)
   final String description;
-
-  @HiveField(3)
   final double laborCost;
-
-  @HiveField(4)
   final double energyCost;
-
-  @HiveField(5)
   final double otherCosts;
-
-  @HiveField(6)
   final List<String> requiredMaterials;
-
-  @HiveField(7)
   final Map<String, double> materialQuantities;
+  final double estimatedTime;
+  final String status;
+  final DateTime createdAt;
 
   Process({
     required this.id,
@@ -37,9 +20,10 @@ class Process {
     required this.otherCosts,
     required this.requiredMaterials,
     required this.materialQuantities,
+    required this.estimatedTime,
+    required this.status,
+    required this.createdAt,
   });
-
-  double get totalCost => laborCost + energyCost + otherCosts;
 
   Process copyWith({
     String? id,
@@ -50,6 +34,9 @@ class Process {
     double? otherCosts,
     List<String>? requiredMaterials,
     Map<String, double>? materialQuantities,
+    double? estimatedTime,
+    String? status,
+    DateTime? createdAt,
   }) {
     return Process(
       id: id ?? this.id,
@@ -60,6 +47,43 @@ class Process {
       otherCosts: otherCosts ?? this.otherCosts,
       requiredMaterials: requiredMaterials ?? this.requiredMaterials,
       materialQuantities: materialQuantities ?? this.materialQuantities,
+      estimatedTime: estimatedTime ?? this.estimatedTime,
+      status: status ?? this.status,
+      createdAt: createdAt ?? this.createdAt,
     );
   }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'name': name,
+      'description': description,
+      'laborCost': laborCost,
+      'energyCost': energyCost,
+      'otherCosts': otherCosts,
+      'requiredMaterials': requiredMaterials,
+      'materialQuantities': materialQuantities,
+      'estimatedTime': estimatedTime,
+      'status': status,
+      'createdAt': createdAt.toIso8601String(),
+    };
+  }
+
+  factory Process.fromJson(Map<String, dynamic> json) {
+    return Process(
+      id: json['id'] as String,
+      name: json['name'] as String,
+      description: json['description'] as String,
+      laborCost: (json['laborCost'] as num).toDouble(),
+      energyCost: (json['energyCost'] as num).toDouble(),
+      otherCosts: (json['otherCosts'] as num).toDouble(),
+      requiredMaterials: List<String>.from(json['requiredMaterials']),
+      materialQuantities: Map<String, double>.from(json['materialQuantities']),
+      estimatedTime: (json['estimatedTime'] as num).toDouble(),
+      status: json['status'] as String,
+      createdAt: DateTime.parse(json['createdAt'] as String),
+    );
+  }
+
+  double get totalCost => laborCost + energyCost + otherCosts;
 }

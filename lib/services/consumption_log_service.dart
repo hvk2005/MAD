@@ -1,13 +1,10 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:hive/hive.dart';
-import 'package:connectivity_plus/connectivity_plus.dart';
+  import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:uuid/uuid.dart';
 import '../models/consumption_log.dart';
 import '../constants/app_constants.dart';
 
 class ConsumptionLogService {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-  final Connectivity _connectivity = Connectivity();
   final Uuid _uuid = const Uuid();
 
   Future<void> logConsumption({
@@ -15,6 +12,7 @@ class ConsumptionLogService {
     required String processId,
     required String operatorId,
     required double quantity,
+    required String notes,
   }) async {
     try {
       final log = ConsumptionLog(
@@ -24,20 +22,14 @@ class ConsumptionLogService {
         operatorId: operatorId,
         quantity: quantity,
         timestamp: DateTime.now(),
-        isSynced: false,
+        notes: notes,
+        isSynced: true,
       );
 
-      // Save to local storage
-      final logsBox = await Hive.openBox<ConsumptionLog>(
-        AppConstants.consumptionLogsBox,
-      );
-      await logsBox.put(log.id, log);
-
-      // Try to sync with Firestore if online
-      final connectivityResult = await _connectivity.checkConnectivity();
-      if (connectivityResult != ConnectivityResult.none) {
-        await _syncLog(log);
-      }
+      await _firestore
+          .collection(AppConstants.consumptionLogsCollection)
+          .doc(log.id)
+          .set(log.toJson());
     } catch (e) {
       throw Exception('Failed to log consumption: $e');
     }
@@ -51,74 +43,41 @@ class ConsumptionLogService {
     DateTime? endDate,
   }) async {
     try {
-      final logsBox = await Hive.openBox<ConsumptionLog>(
-        AppConstants.consumptionLogsBox,
-      );
-      var logs = logsBox.values.toList();
+      Query<Map<String, dynamic>> query =
+          _firestore.collection(AppConstants.consumptionLogsCollection);
 
-      // Apply filters
       if (materialId != null) {
-        logs = logs.where((log) => log.materialId == materialId).toList();
+        query = query.where('materialId', isEqualTo: materialId);
       }
       if (processId != null) {
-        logs = logs.where((log) => log.processId == processId).toList();
+        query = query.where('processId', isEqualTo: processId);
       }
       if (operatorId != null) {
-        logs = logs.where((log) => log.operatorId == operatorId).toList();
+        query = query.where('operatorId', isEqualTo: operatorId);
       }
       if (startDate != null) {
-        logs = logs.where((log) => log.timestamp.isAfter(startDate)).toList();
+        query = query.where('timestamp', isGreaterThanOrEqualTo: startDate);
       }
       if (endDate != null) {
-        logs = logs.where((log) => log.timestamp.isBefore(endDate)).toList();
+        query = query.where('timestamp', isLessThanOrEqualTo: endDate);
       }
 
-      return logs;
+      final snapshot = await query.get();
+      return snapshot.docs.map((doc) {
+        final data = doc.data();
+        return ConsumptionLog(
+          id: doc.id,
+          materialId: data['materialId'] as String,
+          processId: data['processId'] as String,
+          operatorId: data['operatorId'] as String,
+          quantity: (data['quantity'] as num).toDouble(),
+          timestamp: (data['timestamp'] as Timestamp).toDate(),
+          notes: data['notes'] as String,
+          isSynced: data['isSynced'] as bool? ?? true,
+        );
+      }).toList();
     } catch (e) {
       throw Exception('Failed to get consumption logs: $e');
-    }
-  }
-
-  Future<void> syncPendingLogs() async {
-    try {
-      final connectivityResult = await _connectivity.checkConnectivity();
-      if (connectivityResult == ConnectivityResult.none) {
-        return;
-      }
-
-      final logsBox = await Hive.openBox<ConsumptionLog>(
-        AppConstants.consumptionLogsBox,
-      );
-      final pendingLogs = logsBox.values.where((log) => !log.isSynced).toList();
-
-      for (var log in pendingLogs) {
-        await _syncLog(log);
-      }
-    } catch (e) {
-      throw Exception('Failed to sync pending logs: $e');
-    }
-  }
-
-  Future<void> _syncLog(ConsumptionLog log) async {
-    try {
-      await _firestore
-          .collection(AppConstants.consumptionLogsCollection)
-          .doc(log.id)
-          .set({
-            'materialId': log.materialId,
-            'processId': log.processId,
-            'operatorId': log.operatorId,
-            'quantity': log.quantity,
-            'timestamp': Timestamp.fromDate(log.timestamp),
-          });
-
-      // Update local storage
-      final logsBox = await Hive.openBox<ConsumptionLog>(
-        AppConstants.consumptionLogsBox,
-      );
-      await logsBox.put(log.id, log.copyWith(isSynced: true));
-    } catch (e) {
-      throw Exception('Failed to sync log: $e');
     }
   }
 
@@ -141,10 +100,9 @@ class ConsumptionLogService {
 
       return {
         'totalConsumption': totalConsumption,
-        'averageDailyConsumption':
-            startDate != null && endDate != null
-                ? totalConsumption / (endDate.difference(startDate).inDays + 1)
-                : 0,
+        'averageDailyConsumption': startDate != null && endDate != null
+            ? totalConsumption / (endDate.difference(startDate).inDays + 1)
+            : 0,
       };
     } catch (e) {
       throw Exception('Failed to get material consumption summary: $e');

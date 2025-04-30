@@ -1,37 +1,21 @@
-import 'package:hive/hive.dart';
-
-part 'consumption_log.g.dart';
-
-@HiveType(typeId: 4)
 class ConsumptionLog {
-  @HiveField(0)
   final String id;
-
-  @HiveField(1)
   final String materialId;
-
-  @HiveField(2)
   final String processId;
-
-  @HiveField(3)
-  final String operatorId;
-
-  @HiveField(4)
   final double quantity;
-
-  @HiveField(5)
+  final String operatorId;
   final DateTime timestamp;
-
-  @HiveField(6)
+  final String notes;
   final bool isSynced;
 
   ConsumptionLog({
     required this.id,
     required this.materialId,
     required this.processId,
-    required this.operatorId,
     required this.quantity,
+    required this.operatorId,
     required this.timestamp,
+    required this.notes,
     this.isSynced = false,
   });
 
@@ -39,19 +23,47 @@ class ConsumptionLog {
     String? id,
     String? materialId,
     String? processId,
-    String? operatorId,
     double? quantity,
+    String? operatorId,
     DateTime? timestamp,
+    String? notes,
     bool? isSynced,
   }) {
     return ConsumptionLog(
       id: id ?? this.id,
       materialId: materialId ?? this.materialId,
       processId: processId ?? this.processId,
-      operatorId: operatorId ?? this.operatorId,
       quantity: quantity ?? this.quantity,
+      operatorId: operatorId ?? this.operatorId,
       timestamp: timestamp ?? this.timestamp,
+      notes: notes ?? this.notes,
       isSynced: isSynced ?? this.isSynced,
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'materialId': materialId,
+      'processId': processId,
+      'quantity': quantity,
+      'operatorId': operatorId,
+      'timestamp': timestamp.toIso8601String(),
+      'notes': notes,
+      'isSynced': isSynced,
+    };
+  }
+
+  factory ConsumptionLog.fromJson(Map<String, dynamic> json) {
+    return ConsumptionLog(
+      id: json['id'] as String,
+      materialId: json['materialId'] as String,
+      processId: json['processId'] as String,
+      quantity: (json['quantity'] as num).toDouble(),
+      operatorId: json['operatorId'] as String,
+      timestamp: DateTime.parse(json['timestamp'] as String),
+      notes: json['notes'] as String,
+      isSynced: json['isSynced'] as bool? ?? false,
     );
   }
 }
