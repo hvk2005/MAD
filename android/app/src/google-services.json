@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "115124468211",
+    "project_id": "madhk-55157",
+    "storage_bucket": "madhk-55157.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:115124468211:android:a5dfb0ea1efe3374403a86",
+        "android_client_info": {
+          "package_name": "com.harshil.flutter"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBJYN9_PflmiP67_F4vo0cFG-1Ois5FgEs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
