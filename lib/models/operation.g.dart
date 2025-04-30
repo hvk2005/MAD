@@ -1,33 +1,33 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'material.dart';
+part of 'operation.dart';
 
 // **************************************************************************
 // TypeAdapterGenerator
 // **************************************************************************
 
-class MaterialItemAdapter extends TypeAdapter<MaterialItem> {
+class OperationAdapter extends TypeAdapter<Operation> {
   @override
-  final int typeId = 0;
+  final int typeId = 3;
 
   @override
-  MaterialItem read(BinaryReader reader) {
+  Operation read(BinaryReader reader) {
     final numOfFields = reader.readByte();
     final fields = <int, dynamic>{
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
-    return MaterialItem(
+    return Operation(
       id: fields[0] as String,
       name: fields[1] as String,
-      unitCost: fields[2] as double,
-      unitType: fields[3] as String,
-      currentStock: fields[4] as double,
-      minimumStockLevel: fields[5] as double,
+      laborCost: fields[2] as double,
+      energyCost: fields[3] as double,
+      otherCosts: fields[4] as double,
+      desiredMargin: fields[5] as double,
     );
   }
 
   @override
-  void write(BinaryWriter writer, MaterialItem obj) {
+  void write(BinaryWriter writer, Operation obj) {
     writer
       ..writeByte(6)
       ..writeByte(0)
@@ -35,13 +35,13 @@ class MaterialItemAdapter extends TypeAdapter<MaterialItem> {
       ..writeByte(1)
       ..write(obj.name)
       ..writeByte(2)
-      ..write(obj.unitCost)
+      ..write(obj.laborCost)
       ..writeByte(3)
-      ..write(obj.unitType)
+      ..write(obj.energyCost)
       ..writeByte(4)
-      ..write(obj.currentStock)
+      ..write(obj.otherCosts)
       ..writeByte(5)
-      ..write(obj.minimumStockLevel);
+      ..write(obj.desiredMargin);
   }
 
   @override
@@ -50,7 +50,7 @@ class MaterialItemAdapter extends TypeAdapter<MaterialItem> {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is MaterialItemAdapter &&
+      other is OperationAdapter &&
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
 }

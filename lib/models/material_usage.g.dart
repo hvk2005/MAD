@@ -1,47 +1,50 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'material.dart';
+part of 'material_usage.dart';
 
 // **************************************************************************
 // TypeAdapterGenerator
 // **************************************************************************
 
-class MaterialItemAdapter extends TypeAdapter<MaterialItem> {
+class MaterialUsageAdapter extends TypeAdapter<MaterialUsage> {
   @override
-  final int typeId = 0;
+  final int typeId = 2;
 
   @override
-  MaterialItem read(BinaryReader reader) {
+  MaterialUsage read(BinaryReader reader) {
     final numOfFields = reader.readByte();
     final fields = <int, dynamic>{
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
-    return MaterialItem(
+    return MaterialUsage(
       id: fields[0] as String,
-      name: fields[1] as String,
-      unitCost: fields[2] as double,
-      unitType: fields[3] as String,
-      currentStock: fields[4] as double,
-      minimumStockLevel: fields[5] as double,
+      materialId: fields[1] as String,
+      quantityUsed: fields[2] as double,
+      timestamp: fields[3] as DateTime,
+      operatorId: fields[4] as String,
+      operationId: fields[5] as String,
+      totalCost: fields[6] as double,
     );
   }
 
   @override
-  void write(BinaryWriter writer, MaterialItem obj) {
+  void write(BinaryWriter writer, MaterialUsage obj) {
     writer
-      ..writeByte(6)
+      ..writeByte(7)
       ..writeByte(0)
       ..write(obj.id)
       ..writeByte(1)
-      ..write(obj.name)
+      ..write(obj.materialId)
       ..writeByte(2)
-      ..write(obj.unitCost)
+      ..write(obj.quantityUsed)
       ..writeByte(3)
-      ..write(obj.unitType)
+      ..write(obj.timestamp)
       ..writeByte(4)
-      ..write(obj.currentStock)
+      ..write(obj.operatorId)
       ..writeByte(5)
-      ..write(obj.minimumStockLevel);
+      ..write(obj.operationId)
+      ..writeByte(6)
+      ..write(obj.totalCost);
   }
 
   @override
@@ -50,7 +53,7 @@ class MaterialItemAdapter extends TypeAdapter<MaterialItem> {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is MaterialItemAdapter &&
+      other is MaterialUsageAdapter &&
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
 }

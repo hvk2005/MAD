@@ -8,7 +8,7 @@ part of 'user.dart';
 
 class UserAdapter extends TypeAdapter<User> {
   @override
-  final int typeId = 0;
+  final int typeId = 1;
 
   @override
   User read(BinaryReader reader) {
@@ -18,9 +18,9 @@ class UserAdapter extends TypeAdapter<User> {
     };
     return User(
       id: fields[0] as String,
-      email: fields[1] as String,
-      name: fields[2] as String,
-      role: fields[3] as UserRole,
+      username: fields[1] as String,
+      password: fields[2] as String,
+      role: fields[3] as String,
       assignedOperations: (fields[4] as List).cast<String>(),
     );
   }
@@ -32,9 +32,9 @@ class UserAdapter extends TypeAdapter<User> {
       ..writeByte(0)
       ..write(obj.id)
       ..writeByte(1)
-      ..write(obj.email)
+      ..write(obj.username)
       ..writeByte(2)
-      ..write(obj.name)
+      ..write(obj.password)
       ..writeByte(3)
       ..write(obj.role)
       ..writeByte(4)
@@ -48,45 +48,6 @@ class UserAdapter extends TypeAdapter<User> {
   bool operator ==(Object other) =>
       identical(this, other) ||
       other is UserAdapter &&
-          runtimeType == other.runtimeType &&
-          typeId == other.typeId;
-}
-
-class UserRoleAdapter extends TypeAdapter<UserRole> {
-  @override
-  final int typeId = 1;
-
-  @override
-  UserRole read(BinaryReader reader) {
-    switch (reader.readByte()) {
-      case 0:
-        return UserRole.admin;
-      case 1:
-        return UserRole.operator;
-      default:
-        return UserRole.admin;
-    }
-  }
-
-  @override
-  void write(BinaryWriter writer, UserRole obj) {
-    switch (obj) {
-      case UserRole.admin:
-        writer.writeByte(0);
-        break;
-      case UserRole.operator:
-        writer.writeByte(1);
-        break;
-    }
-  }
-
-  @override
-  int get hashCode => typeId.hashCode;
-
-  @override
-  bool operator ==(Object other) =>
-      identical(this, other) ||
-      other is UserRoleAdapter &&
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
 }
